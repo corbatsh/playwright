@@ -16,12 +16,24 @@ export class Homepage {
   }
 
   async goto() {
-    await this.page.goto('https://parabank.parasoft.com/parabank/about.htm');
+    await this.page.goto('/');
+  }
+
+  async fillUsernameInput(username: string) {
+    await this.usernameInput.fill(username);
+  }
+
+  async fillPasswordInput(password: string) {
+    await this.passwordInput.fill(password);
+  }
+
+  async clickLoginButton() {
+    await this.loginButton.click();
   }
 
   async login(username: string, password: string) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
+    this.fillUsernameInput(username);
+    this.fillPasswordInput(password);
+    this.clickLoginButton();
   }
 }
