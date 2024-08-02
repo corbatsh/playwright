@@ -12,13 +12,20 @@ test.describe('login', () => {
   });
 
   test('Verify invalid login data error', async () => {
-    await homepage.login(invalidLoginData.username, invalidLoginData.password);
-    await expect(homepage.errorMessage).toBeVisible();
+    await homepage.login({
+      username: invalidLoginData.username,
+      password: invalidLoginData.password,
+    });
+    const errorMessage = await homepage.getErrorMessage();
+    expect(errorMessage).toContain('Invalid username or password');
   });
 
   test('Verify login into account', async ({ page }) => {
     const accountOverview = new AccountOverview(page);
-    await homepage.login(loginData.username, loginData.password);
+    await homepage.login({
+      username: loginData.username,
+      password: loginData.password,
+    });
     await expect(accountOverview.header).toBeVisible();
   });
 });

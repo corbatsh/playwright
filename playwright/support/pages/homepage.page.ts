@@ -1,39 +1,37 @@
-import { type Locator, type Page } from '@playwright/test';
+import { type Page, type Locator } from '@playwright/test';
+import { fillInput, getTextContent } from './common.page';
+import { ILoginData } from '../utils/types';
 
 export class Homepage {
-  readonly page: Page;
-  readonly usernameInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginButton: Locator;
-  readonly errorMessage: Locator;
+  protected readonly page: Page;
+  private readonly locators: { [key: string]: Locator };
 
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.locator('input[name="username"]');
-    this.passwordInput = page.locator('input[name="password"]');
-    this.loginButton = page.locator('input[type="submit"]');
-    this.errorMessage = page.locator('#rightPanel .error');
+    this.locators = {
+      usernameInput: page.locator('input[name="username"]'),
+      passwordInput: page.locator('input[name="password"]'),
+      loginButton: page.locator('input[type="submit"]'),
+      errorMessage: page.locator('#rightPanel .error'),
+      registerButton: page.locator('a[href="register.htm"]'),
+    };
   }
 
-  async goto() {
+  async goto(): Promise<void> {
     await this.page.goto('/');
   }
 
-  async fillUsernameInput(username: string) {
-    await this.usernameInput.fill(username);
+  async login({ username, password }: ILoginData): Promise<void> {
+    await fillInput(this.locators.usernameInput, username);
+    await fillInput(this.locators.passwordInput, password);
+    await this.locators.loginButton.click();
   }
 
-  async fillPasswordInput(password: string) {
-    await this.passwordInput.fill(password);
+  async clickRegisterButton(): Promise<void> {
+    await this.locators.registerButton.click();
   }
 
-  async clickLoginButton() {
-    await this.loginButton.click();
-  }
-
-  async login(username: string, password: string) {
-    this.fillUsernameInput(username);
-    this.fillPasswordInput(password);
-    this.clickLoginButton();
+  async getErrorMessage(): Promise<string> {
+    return await getTextContent(this.locators.errorMessage);
   }
 }
