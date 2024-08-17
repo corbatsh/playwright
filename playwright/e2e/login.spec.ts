@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { Homepage } from '../support/pages/homepage.page';
-import { invalidLoginData, loginData } from '../fixtures/login';
+import { invalidLoginData, loginData } from '../fixtures/userData';
 import { AccountOverview } from '../support/pages/accountOverview.page';
 
-test.describe('login', () => {
+test.describe('Login', () => {
   let homepage: Homepage;
 
   test.beforeEach(async ({ page }) => {
@@ -17,7 +17,7 @@ test.describe('login', () => {
       password: invalidLoginData.password,
     });
     const errorMessage = await homepage.getErrorMessage();
-    expect(errorMessage).toContain('Invalid username or password');
+    expect.soft(errorMessage).toContain('Invalid username or password');
   });
 
   test('Verify login into account', async ({ page }) => {
@@ -26,6 +26,6 @@ test.describe('login', () => {
       username: loginData.username,
       password: loginData.password,
     });
-    await expect(accountOverview.header).toBeVisible();
+    await expect.soft(accountOverview.header).toBeVisible();
   });
 });

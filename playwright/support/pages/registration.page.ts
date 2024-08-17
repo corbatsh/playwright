@@ -1,27 +1,26 @@
 import { type Locator, type Page } from '@playwright/test';
 
 export class Registration {
-  private readonly page: Page;
-  private readonly locators: { [key: string]: Locator };
-
+  protected readonly page: Page;
+  public readonly locators: { [key: string]: Locator };
   constructor(page: Page) {
     this.page = page;
     this.locators = {
-      firstName: page.locator('#customer.firstName'),
-      lastName: page.locator('#customer.lastName'),
-      address: page.locator('#customer.address.street'),
-      city: page.locator('#customer.address.city'),
-      state: page.locator('#customer.address.state'),
-      zipCode: page.locator('#customer.address.zipCode'),
-      phone: page.locator('#customer.phoneNumber'),
-      ssn: page.locator('#customer.ssn'),
-      username: page.locator('#customer.username'),
-      password: page.locator('#customer.password'),
-      passwordConfirm: page.locator('#repeatedPassword'),
+      firstName: page.locator('input[name="customer.firstName"]'),
+      lastName: page.locator('input[name="customer.lastName"]'),
+      address: page.locator('input[name="customer.address.street"]'),
+      city: page.locator('input[name="customer.address.city"]'),
+      state: page.locator('input[name="customer.address.state"]'),
+      zipCode: page.locator('input[name="customer.address.zipCode"]'),
+      phone: page.locator('input[name="customer.phoneNumber"]'),
+      ssn: page.locator('input[name="customer.ssn"]'),
+      username: page.locator('input[name="customer.username"]'),
+      password: page.locator('input[name="customer.password"]'),
+      passwordConfirm: page.locator('input[name="repeatedPassword"]'),
+      registerButton: page.locator('input[value="Register"]'),
     };
   }
-
-  private async fillInput(locator: Locator, value: string) {
+  private async fillInput(locator: Locator, value: string): Promise<void> {
     await locator.fill(value);
   }
 
@@ -31,13 +30,13 @@ export class Registration {
     address: string;
     city: string;
     state: string;
-    zipCode: string;
+    zipCode: number;
     phoneNumber: number;
     ssn: number;
     username: string;
     password: string;
     passwordConfirm: string;
-  }) {
+  }): Promise<void> {
     const {
       firstName,
       lastName,
@@ -57,11 +56,15 @@ export class Registration {
     await this.fillInput(this.locators.address, address);
     await this.fillInput(this.locators.city, city);
     await this.fillInput(this.locators.state, state);
-    await this.fillInput(this.locators.zipCode, zipCode);
+    await this.fillInput(this.locators.zipCode, String(zipCode));
     await this.fillInput(this.locators.phone, String(phoneNumber));
     await this.fillInput(this.locators.ssn, String(ssn));
     await this.fillInput(this.locators.username, username);
     await this.fillInput(this.locators.password, password);
     await this.fillInput(this.locators.passwordConfirm, passwordConfirm);
+  }
+
+  public async clickRegisterButton(): Promise<void> {
+    this.locators.registerButton.click();
   }
 }
