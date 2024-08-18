@@ -7,6 +7,11 @@ export const fillInput = async (
   await locator.fill(value);
 };
 
-export async function getTextContent(locator: Locator): Promise<string> {
+export const getTextContent = async (locator: Locator): Promise<string> => {
   return (await locator.textContent()) ?? '';
-}
+};
+
+export const generateUniqueUsername = (baseUsername: string): string => {
+  const timestamp = new Date().getTime();
+  return `${baseUsername}_${timestamp}`;
+};

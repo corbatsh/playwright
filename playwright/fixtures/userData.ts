@@ -1,7 +1,5 @@
 import { ILoginData, IRegistrationData } from '../support/utils/types';
-
-const date = new Date();
-const now = date.getTime;
+import { generateUniqueUsername } from '../support/pages/common.page';
 
 export const loginData = {
   username: 'test123',
@@ -22,7 +20,7 @@ export const registrationData = {
   zipCode: 90001,
   phoneNumber: 123321123,
   ssn: 321123321,
-  username: `test${now}`,
+  username: generateUniqueUsername('user'),
   password: '1Password!',
   passwordConfirm: '1Password!',
 } satisfies IRegistrationData;

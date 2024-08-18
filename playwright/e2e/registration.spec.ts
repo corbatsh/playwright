@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { Homepage } from '../support/pages/homepage.page';
 import {} from '../fixtures/userData';
 import { Registration } from '../support/pages/registration.page';
@@ -17,5 +17,6 @@ test.describe('Registration', () => {
     await homepage.clickRegisterButton();
     await registration.fillRegistrationForm(registrationData);
     await registration.clickRegisterButton();
+    await expect(registration.locators.welcomeMessage).toContainText('user');
   });
 });

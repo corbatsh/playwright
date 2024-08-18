@@ -2,7 +2,7 @@ import { type Locator, type Page } from '@playwright/test';
 
 export class Registration {
   protected readonly page: Page;
-  public readonly locators: { [key: string]: Locator };
+  public locators: { [key: string]: Locator };
   constructor(page: Page) {
     this.page = page;
     this.locators = {
@@ -18,6 +18,9 @@ export class Registration {
       password: page.locator('input[name="customer.password"]'),
       passwordConfirm: page.locator('input[name="repeatedPassword"]'),
       registerButton: page.locator('input[value="Register"]'),
+      welcomeMessage: page
+        .getByRole('heading', { level: 1 })
+        .and(page.locator('.title')),
     };
   }
   private async fillInput(locator: Locator, value: string): Promise<void> {
